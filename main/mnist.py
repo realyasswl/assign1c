@@ -32,13 +32,8 @@ def load_data_wrapper():
     # array to store failure results
     fail_list = [];
     start_time = datetime.datetime.now()
-    print("starts at:", start_time)
     # the double loop statement, outer loop is for each data in test dataset
     for d in range(len(norm_te_d[0])):
-        if d % 100 == 0:
-            print(datetime.datetime.now(), d)
-            print("succ:", len(succ_list))
-            print("fail:", len(fail_list))
         # variable to store information for each test data, the first element is the max dot value,
         # the second element is the corresponding estimated result
         nearest = (0, 0)
