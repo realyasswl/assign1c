@@ -40,7 +40,7 @@ def load_data_wrapper():
             print("succ:", len(succ_list))
             print("fail:", len(fail_list))
         # variable to store information for each test data, the first element is the max dot value,
-        # the second value is the corresponding estimated result
+        # the second element is the corresponding estimated result
         nearest = (0, 0)
         # inner loop is for each data in training dataset
         for k in range(len(norm_tr_d[0])):
