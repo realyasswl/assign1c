@@ -14,12 +14,8 @@ def load_data():
     return training_data, validation_data, test_data
 
 
-# don't need function vectorized_result if we don't need the pre-process
-
-
 def load_data_wrapper():
     tr_d, va_d, te_d = load_data()
-# don't really need the pre-process
 
 # normalize the training data
     norm_tr_d = ([t / np.reshape(np.linalg.norm(t), (-1, 1))
@@ -71,29 +67,36 @@ def compute_matrix(succ, fail):
 # put true value in row and estimated value in column
         matrix[f[1]][f[0][1]] += 1
 # calculate the precision and recall
+    correct_count = 0
     for i in xrange(10):
-        matrix[i][10]=round(float(matrix[i][i])/sum(matrix[i]),3)
-        matrix[10][i]=round(float(matrix[i][i])/sum((zip(*matrix)[i])),3)
-
+        matrix[i][10] = round(float(matrix[i][i]) / sum(matrix[i]), 3)
+        matrix[10][i] = round(float(matrix[i][i]) / sum((zip(*matrix)[i])), 3)
+        correct_count += matrix[i][i]
+    accuracy = float(correct_count)/10000
+    print("accuracy=", accuracy)
     for e in matrix:
-        print '|'.join(['%5s' % (e[n]) for n in xrange(len(e))])
+        print ('|'.join(['%5s' % (e[n]) for n in xrange(len(e))]))
 
 
 if __name__ == "__main__":
-    succfileloc = '../succ_list'
-    failfileloc = '../fail_list'
-    f1 = open(succfileloc, 'rb')
-    f2 = open(failfileloc, 'rb')
-    succ = cPickle.load(f1)
-    fail = cPickle.load(f2)
-    f1.close()
-    f2.close()
-    if succ is None or fail is None:
-        succ, fail = load_data_wrapper()
-        f1 = open(succfileloc, 'wb')
-        f2 = open(failfileloc, 'wb')
-        cPickle.dump(succ, f1)
-        cPickle.dump(fail, f2)
+    load=False
+    if load:
+        load_data_wrapper()
+    else:
+        succfileloc = '../succ_list'
+        failfileloc = '../fail_list'
+        f1 = open(succfileloc, 'rb')
+        f2 = open(failfileloc, 'rb')
+        succ = cPickle.load(f1)
+        fail = cPickle.load(f2)
         f1.close()
         f2.close()
-    compute_matrix(succ, fail)
+        if succ is None or fail is None:
+            succ, fail = load_data_wrapper()
+            f1 = open(succfileloc, 'wb')
+            f2 = open(failfileloc, 'wb')
+            cPickle.dump(succ, f1)
+            cPickle.dump(fail, f2)
+            f1.close()
+            f2.close()
+        compute_matrix(succ, fail)
